@@ -1,1 +1,20 @@
 package main
+
+import (
+	"fmt"
+
+	"github.com/Gierdiaz/diagier-clinics/config"
+	"github.com/Gierdiaz/diagier-clinics/pkg/logger"
+)
+
+func main() {
+
+	logger := logger.NewLogger()
+
+	config, err := config.LoadConfig()
+	if err != nil {
+		logger.Log("Erro ao carregar configurações", err)
+		return
+	}
+	fmt.Printf("Conectando na porta %s...\n", config.DB_PORT)
+}
