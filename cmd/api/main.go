@@ -38,11 +38,9 @@ func main() {
 	router := endpoint.Router()
 
 	// Rodando o servidor HTTP na porta 8080
-	err = http.ListenAndServe(":8080", router)
+	err = http.ListenAndServe(config.Server.APP_SERVER, router)
 	if err != nil {
 		logger.Log("level", "error", "msg", "Erro ao iniciar o servidor", err)
 		os.Exit(1)
 	}
-	
-
 }

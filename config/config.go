@@ -62,24 +62,24 @@ func LoadConfig() (*Config, error) {
 func validateConfig(cfg *Config) error {
 	// Validar o servidor
 	if cfg.Server.APP_SERVER == "" {
-		return errors.New("APP_SERVER not configured")
+		return errors.New("APP_SERVER não configurado")
 	}
 
 	// Validar o banco de dados
 	if cfg.Database.DB_HOST == "" {
-		return errors.New("DB_HOST not configured")
+		return errors.New("DB_HOST não configurado")
 	}
 	if cfg.Database.DB_PORT == "" {
-		return errors.New("DB_PORT not configured")
+		return errors.New("DB_PORT não configurado")
 	}
 	if cfg.Database.DB_USER == "" {
-		return errors.New("DB_USER not configured")
+		return errors.New("DB_USER não configurado")
 	}
 	if cfg.Database.DB_PASSWORD == "" {
-		return errors.New("DB_PASSWORD not configured")
+		return errors.New("DB_PASSWORD não configurado")
 	}
 	if cfg.Database.DB_NAME == "" {
-		return errors.New("DB_NAME not configured")
+		return errors.New("DB_NAME não configurado")
 	}
 
 	return nil
