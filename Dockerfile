@@ -16,17 +16,27 @@ COPY . .
 # Compila o binário
 RUN go build -o main ./cmd/api
 
+# Verifica se o binário foi gerado
+RUN ls -la /app
+
 # Etapa de execução
 FROM alpine:latest
+
+# Cria o diretório de trabalho no contêiner final
+WORKDIR /app
 
 # Copia o binário compilado da etapa de construção
 COPY --from=builder /app/main /app/main
 
-# Define o diretório de trabalho no contêiner final
-WORKDIR /app
+# Copia o arquivo .env para o contêiner
+COPY .env /app/.env
 
 # Expõe a porta que o serviço vai usar
 EXPOSE 8080
 
+# Definindo a variável de ambiente com a localização do arquivo .env
+ENV GO_ENV=production
+
 # Comando que será executado ao iniciar o contêiner
-CMD ["./main"]
+CMD ["/app/main"]
+
