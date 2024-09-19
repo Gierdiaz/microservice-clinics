@@ -2,6 +2,7 @@ package patients
 
 import (
 	"errors"
+	"regexp"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,6 +41,11 @@ func (p *Pacient) Validate() error {
 
 	if len(p.Phone) == 0 {
 		return errors.New("o telefone deve ser preenchido")
+	}
+
+	e164Regex := regexp.MustCompile(`^\+?[1-9]\d{1,14}$`)
+	if !e164Regex.MatchString(p.Phone) {
+		return errors.New("phone number must be in valid E.164 format (e.g., +5511999999999)")
 	}
 
 	if len(p.Email) == 0 {
