@@ -3,16 +3,16 @@ package handler
 import (
 	"net/http"
 
-	"github.com/Gierdiaz/diagier-clinics/internal/domain/patients"
+	"github.com/Gierdiaz/diagier-clinics/internal/domain/patient"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
 
 type PatientsHandler struct {
-	service patients.PatientService
+	service patient.PatientService
 }
 
-func NewPatientsHandler(service patients.PatientService) *PatientsHandler {
+func NewPatientsHandler(service patient.PatientService) *PatientsHandler {
 	return &PatientsHandler{service: service}
 }
 
@@ -40,7 +40,7 @@ func (handler *PatientsHandler) GetPatientByID(c *gin.Context) {
 }
 
 func (handler *PatientsHandler) CreatePatient(c *gin.Context) {
-	var dto patients.PatientDTO
+	var dto patient.PatientDTO
 	if err := c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -59,7 +59,7 @@ func (handler *PatientsHandler) UpdatePatient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var dto patients.PatientDTO
+	var dto patient.PatientDTO
 	if err := c.ShouldBindJSON(&dto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

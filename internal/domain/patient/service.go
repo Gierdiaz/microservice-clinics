@@ -1,4 +1,4 @@
-package patients
+package patient
 
 import (
 	"time"

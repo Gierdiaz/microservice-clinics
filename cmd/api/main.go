@@ -9,6 +9,7 @@ import (
 	"github.com/Gierdiaz/diagier-clinics/infrastructure/database"
 	"github.com/Gierdiaz/diagier-clinics/internal/endpoint"
 	"github.com/Gierdiaz/diagier-clinics/pkg/logger"
+	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"
 )
 
 func main() {
@@ -23,6 +24,9 @@ func main() {
 	}
 	logger.Log("level", "info", "msg", "Configurações carregadas com sucesso", "port: ", config.Database.DB_PORT)
 	fmt.Printf("Conectando na porta %s...\n", config.Database.DB_PORT)
+
+	// Initialize JWT middleware
+	middleware.InitJWT(config)
 
 	// Conectando ao banco de dados
 	db, err := database.InitDatabase(config)

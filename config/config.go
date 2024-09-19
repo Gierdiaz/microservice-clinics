@@ -22,10 +22,16 @@ type Database struct {
 	DB_NAME     string
 }
 
+type JWT struct {
+	Secret   string
+	ExpHours int
+}
+
 // Estrutura principal de configuração
 type Config struct {
 	Server   Server
 	Database Database
+	JWT      JWT
 }
 
 // Função para carregar o arquivo .env e preencher as configurações
@@ -47,6 +53,10 @@ func LoadConfig() (*Config, error) {
 			DB_USER:     os.Getenv("DB_USER"),
 			DB_PASSWORD: os.Getenv("DB_PASSWORD"),
 			DB_NAME:     os.Getenv("DB_NAME"),
+		},
+		JWT: JWT{
+			Secret:   os.Getenv("JWT_SECRET"),
+			ExpHours: 24,
 		},
 	}
 
@@ -80,6 +90,11 @@ func validateConfig(cfg *Config) error {
 	}
 	if cfg.Database.DB_NAME == "" {
 		return errors.New("DB_NAME não configurado")
+	}
+
+	// Validar JWT
+	if cfg.JWT.Secret == "" {
+		return errors.New("JWT_SECRET não configurado")
 	}
 
 	return nil
