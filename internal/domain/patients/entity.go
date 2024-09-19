@@ -45,7 +45,7 @@ func (p *Pacient) Validate() error {
 
 	e164Regex := regexp.MustCompile(`^\+?[1-9]\d{1,14}$`)
 	if !e164Regex.MatchString(p.Phone) {
-		return errors.New("phone number must be in valid E.164 format (e.g., +5511999999999)")
+		return errors.New("o número de telefone deve estar no formato +5511999999999")
 	}
 
 	if len(p.Email) == 0 {
