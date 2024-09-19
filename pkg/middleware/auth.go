@@ -29,7 +29,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Converte o ID para uuid.UUID
 		parsedID, err := uuid.Parse(userID)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid user ID format"})
@@ -37,7 +36,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Adiciona o ID do usuário no contexto para uso posterior
 		c.Set("userID", parsedID)
 		c.Next()
 	}
