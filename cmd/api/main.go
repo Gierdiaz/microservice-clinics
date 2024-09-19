@@ -35,7 +35,7 @@ func main() {
 	logger.Log("level", "info", "msg", "Conexão com o banco de dados estabelecida")
 
 	// Inicializando o roteador Gin
-	router := endpoint.Router()
+	router := endpoint.Router(db)
 
 	// Rodando o servidor HTTP na porta 8080
 	err = http.ListenAndServe(config.Server.APP_SERVER, router)
