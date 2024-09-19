@@ -9,6 +9,7 @@ WORKDIR /app
 # Copia os arquivos do projeto para dentro do contêiner
 COPY go.mod go.sum ./
 RUN go mod download
+RUN go mod tidy
 
 # Copia o código fonte
 COPY . .

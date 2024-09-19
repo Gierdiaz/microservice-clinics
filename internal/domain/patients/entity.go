@@ -1,14 +1,14 @@
 package patients
 
 import (
-	"errors"
 	"regexp"
 	"time"
 
+	"github.com/Gierdiaz/diagier-clinics/pkg/errors"
 	"github.com/google/uuid"
 )
 
-type Pacient struct {
+type Patient struct {
 	ID           uuid.UUID `db:"id" json:"id"`
 	Name         string    `db:"name" json:"name"`
 	Age          int       `db:"age" json:"age"`
@@ -21,35 +21,34 @@ type Pacient struct {
 	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
 }
 
-func (p *Pacient) Validate() error {
-
+func (p *Patient) Validate() error {
 	if len(p.Name) < 3 || len(p.Name) > 100 {
-		return errors.New("o nome deve ter entre 3 e 100 caracteres")
+		return &errors.ValidationError{Field: "name", Message: errors.ErrInvalidName}
 	}
 
 	if p.Age < 0 || p.Age > 150 {
-		return errors.New("a idade deve ser entre 0 e 150")
+		return &errors.ValidationError{Field: "age", Message: errors.ErrInvalidAge}
 	}
 
 	if p.Gender != "male" && p.Gender != "female" && p.Gender != "other" {
-		return errors.New("o genero deve ser 'male', 'female' ou 'other'")
+		return &errors.ValidationError{Field: "gender", Message: errors.ErrInvalidGender}
 	}
 
 	if len(p.Address) < 3 || len(p.Address) > 100 {
-		return errors.New("o endereço deve ter entre 3 e 100 caracteres")
+		return &errors.ValidationError{Field: "address", Message: errors.ErrInvalidAddress}
 	}
 
 	if len(p.Phone) == 0 {
-		return errors.New("o telefone deve ser preenchido")
+		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}
 	}
 
 	e164Regex := regexp.MustCompile(`^\+?[1-9]\d{1,14}$`)
 	if !e164Regex.MatchString(p.Phone) {
-		return errors.New("o número de telefone deve estar no formato +5511999999999")
+		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}
 	}
 
 	if len(p.Email) == 0 {
-		return errors.New("o email deve ser preenchido")
+		return &errors.ValidationError{Field: "email", Message: errors.ErrInvalidEmail}
 	}
 
 	return nil

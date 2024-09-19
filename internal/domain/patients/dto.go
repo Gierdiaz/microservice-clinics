@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type PacientDTO struct {
+type PatientDTO struct {
 	Name         string `json:"name" validate:"required,min=3,max=100"`
 	Age          int    `json:"age" validate:"required,gt=0,lt=150"`
 	Gender       string `json:"gender" validate:"required,oneof=male female other"`
@@ -15,8 +15,8 @@ type PacientDTO struct {
 	Observations string `json:"observations" validate:"omitempty,min=3,max=1000"`
 }
 
-func (dto *PacientDTO) ToEntity() *Pacient {
-	return &Pacient{
+func (dto *PatientDTO) ToEntity() *Patient {
+	return &Patient{
 		ID:           uuid.New(),
 		Name:         dto.Name,
 		Age:          dto.Age,
