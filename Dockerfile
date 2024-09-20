@@ -6,10 +6,13 @@ RUN apk update && apk add --no-cache git
 # Cria o diretório de trabalho
 WORKDIR /app
 
+# Desativa o proxy Go
+ENV GOPROXY=direct
+
 # Copia os arquivos do projeto para dentro do contêiner
 COPY go.mod go.sum ./
-RUN go mod download
 RUN go mod tidy
+RUN go mod download
 
 # Copia o código fonte
 COPY . .

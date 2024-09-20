@@ -28,6 +28,6 @@ func (r *userRepository) FindByUsername(ctx context.Context, username string) (*
 }
 
 func (r *userRepository) Create(ctx context.Context, user *User) error {
-	_, err := r.db.NamedExecContext(ctx, "INSERT INTO users (id, name, email, password, role) VALUES (:id, :name, :email, :password, :role)", user)
+	_, err := r.db.NamedExecContext(ctx, "INSERT INTO users (id, name, email, password) VALUES (:id, :name, :email, :password)", user)
 	return err
 }

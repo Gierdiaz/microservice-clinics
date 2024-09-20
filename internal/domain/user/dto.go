@@ -4,12 +4,12 @@ import "github.com/google/uuid"
 
 type UserDTO struct {
 	ID       uuid.UUID `json:"id"`
-	Username string    `json:"username"`
+	Name     string `json:"name" validate:"required"`
 }
 
 type AuthRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+    Email    string `json:"email" validate:"required,email"`
+    Password string `json:"password" validate:"required,min=3"`
 }
 
 type AuthResponse struct {

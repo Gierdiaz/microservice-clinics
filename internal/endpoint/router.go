@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/Gierdiaz/diagier-clinics/internal/setup"
-	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"
+	_ "github.com/Gierdiaz/diagier-clinics/pkg/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 )
 
 func Router(db *sqlx.DB) *gin.Engine {
-	router := gin.Default()
+router := gin.Default()
 
 	patientHandler := setup.SetupServices(db)
 	userHandler := setup.SetupUserServices(db)
@@ -28,17 +28,23 @@ func Router(db *sqlx.DB) *gin.Engine {
 		v1.POST("/register", userHandler.Register)
 		v1.POST("/login", userHandler.Login)
 
+		v1.GET("/patients", patientHandler.GetAllPatients)
+		v1.GET("/patients/:id", patientHandler.GetPatientByID)
+		v1.POST("/patients", patientHandler.CreatePatient)
+		v1.PUT("/patients/:id", patientHandler.UpdatePatient)
+		v1.DELETE("/patients/:id", patientHandler.DeletePatient)
+
 		// Rotas protegidas
-		authorized := v1.Group("/")
-		authorized.Use(middleware.AuthMiddleware())
-		{
-			// Rotas para pacientes
-			authorized.GET("/patients", patientHandler.GetAllPatients)
-			authorized.GET("/patients/:id", patientHandler.GetPatientByID)
-			authorized.POST("/patients", patientHandler.CreatePatient)
-			authorized.PUT("/patients/:id", patientHandler.UpdatePatient)
-			authorized.DELETE("/patients/:id", patientHandler.DeletePatient)
-		}
+		// authorized := v1.Group("/")
+		// authorized.Use(middleware.AuthMiddleware())
+		// {
+		// 	// Rotas para pacientes
+		// 	authorized.GET("patients", patientHandler.GetAllPatients)
+		// 	authorized.GET("patients/:id", patientHandler.GetPatientByID)
+		// 	authorized.POST("patients", patientHandler.CreatePatient)
+		// 	authorized.PUT("patients/:id", patientHandler.UpdatePatient)
+		// 	authorized.DELETE("patients/:id", patientHandler.DeletePatient)
+		// }
 	}
 
 	return router

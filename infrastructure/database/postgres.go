@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/Gierdiaz/diagier-clinics/config"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/Gierdiaz/diagier-clinics/config"
 )
 
 func InitDatabase(config *config.Config) (*sqlx.DB, error) {
