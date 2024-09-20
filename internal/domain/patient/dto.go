@@ -8,7 +8,7 @@ import (
 type PatientDTO struct {
 	Name         string `json:"name" validate:"required,min=3,max=100"`
 	Age          int    `json:"age" validate:"required,gt=0,lt=150"`
-	Gender       string `json:"gender" validate:"required,oneof=male female other"`
+	Gender       string `json:"gender" validate:"required,oneof=masculino feminino outro"`
 	Address      string `json:"address" validate:"required,min=3,max=100"`
 	Phone        string `json:"phone" validate:"required,e164"` // Exemplo: +5511999999999
 	Email        string `json:"email" validate:"required,email"`
