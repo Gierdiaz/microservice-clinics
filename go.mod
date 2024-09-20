@@ -8,6 +8,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.1
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/joho/godotenv v1.5.1
+	github.com/pkg/errors v0.9.1
 	golang.org/x/crypto v0.27.0
 )
 

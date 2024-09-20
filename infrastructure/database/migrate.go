@@ -6,8 +6,9 @@ import (
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
-	"github.com/jmoiron/sqlx"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"github.com/jmoiron/sqlx"
+	"github.com/pkg/errors"
 )
 
 func RunMigrate(db *sqlx.DB) error {
@@ -25,7 +26,7 @@ func RunMigrate(db *sqlx.DB) error {
 	log.Printf("Tentando aplicar as migrations do diretório: %s", "file:///app/infrastructure/database/migrations")
 	err = m.Up()
 	if err != nil && err != migrate.ErrNoChange {	
-		return fmt.Errorf("erro ao aplicar as migrations: %w", err)
+		return errors.Wrap(err, "Erro ao aplicar as migrations")
 	}
 
 	log.Println("Migrations aplicadas com sucesso")
