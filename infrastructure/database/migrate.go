@@ -17,12 +17,12 @@ func RunMigrate(db *sqlx.DB) error {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://infrastructure/database/migrations", "postgres", driver)
+		"file:///app/infrastructure/database/migrations", "postgres", driver)
 	if err != nil {
 		return fmt.Errorf("erro ao carregar as migrations: %w", err)
 	}
 	
-	log.Printf("Tentando aplicar as migrations do diretório: %s", "file://infrastructure/database/migrations")
+	log.Printf("Tentando aplicar as migrations do diretório: %s", "file:///app/infrastructure/database/migrations")
 	err = m.Up()
 	if err != nil && err != migrate.ErrNoChange {	
 		return fmt.Errorf("erro ao aplicar as migrations: %w", err)

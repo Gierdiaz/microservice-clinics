@@ -11,8 +11,7 @@ ENV GOPROXY=direct
 
 # Copia os arquivos do projeto para dentro do contêiner
 COPY go.mod go.sum ./
-RUN go mod tidy
-RUN go mod download
+RUN go mod tidy && go mod download
 
 # Copia o código fonte
 COPY . .

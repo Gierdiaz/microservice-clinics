@@ -10,6 +10,10 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      retries: 5
     networks:
       - app-network
 
@@ -24,6 +28,8 @@ services:
       DB_NAME: ${DB_NAME}
     ports:
       - "8080:8080"
+    volumes:
+    - ./infrastructure/database/migrations:/app/infrastructure/database/migrations
     depends_on:
       - diagier_clinics_db
     networks:
