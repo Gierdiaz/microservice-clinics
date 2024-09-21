@@ -21,6 +21,7 @@ type Patient struct {
 	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// Validate checks for the validity of Patient fields
 func (p *Patient) Validate() error {
 	if len(p.Name) < 3 || len(p.Name) > 100 {
 		return &errors.ValidationError{Field: "name", Message: errors.ErrInvalidName}
@@ -30,7 +31,7 @@ func (p *Patient) Validate() error {
 		return &errors.ValidationError{Field: "age", Message: errors.ErrInvalidAge}
 	}
 
-	if p.Gender != "male" && p.Gender != "female" && p.Gender != "other" {
+	if p.Gender != "masculino" && p.Gender != "feminino" && p.Gender != "outro" {
 		return &errors.ValidationError{Field: "gender", Message: errors.ErrInvalidGender}
 	}
 
@@ -41,7 +42,6 @@ func (p *Patient) Validate() error {
 	if len(p.Phone) == 0 {
 		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}
 	}
-
 	e164Regex := regexp.MustCompile(`^\+?[1-9]\d{1,14}$`)
 	if !e164Regex.MatchString(p.Phone) {
 		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}

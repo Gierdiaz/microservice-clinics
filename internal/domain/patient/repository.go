@@ -40,8 +40,7 @@ func (repo *patientRepository) Show(id uuid.UUID) (*Patient, error) {
 }
 
 func (repo *patientRepository) Store(patient *Patient) (*Patient, error) {
-	_, err := repo.db.NamedExec(`
-		INSERT INTO patients (id, name, age, gender, address, phone, email, observations, created_at, updated_at)
+	_, err := repo.db.NamedExec(`INSERT INTO patients (id, name, age, gender, address, phone, email, observations, created_at, updated_at)
 		VALUES (:id, :name, :age, :gender, :address, :phone, :email, :observations, :created_at, :updated_at)`,
 		patient)
 	if err != nil {
