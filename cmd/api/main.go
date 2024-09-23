@@ -9,6 +9,7 @@ import (
 	"github.com/Gierdiaz/diagier-clinics/infrastructure/database"
 	"github.com/Gierdiaz/diagier-clinics/internal/endpoint"
 	"github.com/Gierdiaz/diagier-clinics/pkg/logger"
+	"github.com/Gierdiaz/diagier-clinics/pkg/messaging"
 	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"
 	"github.com/Gierdiaz/diagier-clinics/pkg/validator"
 )
@@ -51,8 +52,16 @@ func main() {
 
 	logger.Log("level", "info", "msg", "Migrations aplicadas com sucesso")
 
+	// Inicializando a conexão RabbitMQ
+	rabbitMQ, err := messaging.NewRabbitMQ(config.RabbitMQ.URL) // Use a URL de conexão do RabbitMQ aqui
+	if err != nil {
+		logger.Log("level", "info", "msg", "Conectando ao RabbitMQ", "url", config.RabbitMQ.URL)
+		os.Exit(1)
+	}
+	defer rabbitMQ.Close() // Fechar a conexão ao finalizar o programa
+
 	// Inicializando o roteador Gin
-	router := endpoint.Router(db)
+	router := endpoint.Router(db, rabbitMQ)
 
 	// Rodando o servidor HTTP na porta 8080
 	err = http.ListenAndServe(config.Server.APP_SERVER, router)
