@@ -27,11 +27,18 @@ type JWT struct {
 	ExpHours int
 }
 
+// Definindo a estrutura do RabbitMQ
+type RabbitMQ struct {
+	URL string
+}
+
+
 // Estrutura principal de configuração
 type Config struct {
 	Server   Server
 	Database Database
 	JWT      JWT
+	RabbitMQ RabbitMQ
 }
 
 // Função para carregar o arquivo .env e preencher as configurações
@@ -57,6 +64,9 @@ func LoadConfig() (*Config, error) {
 		JWT: JWT{
 			Secret:   os.Getenv("JWT_SECRET"),
 			ExpHours: 24,
+		},
+		RabbitMQ: RabbitMQ{
+			URL: os.Getenv("RABBITMQ_URL"),
 		},
 	}
 
@@ -95,6 +105,11 @@ func validateConfig(cfg *Config) error {
 	// Validar JWT
 	if cfg.JWT.Secret == "" {
 		return errors.New("JWT_SECRET não configurado")
+	}
+
+	// Validar RabbitMQ
+	if cfg.RabbitMQ.URL == "" {
+		return errors.New("RABBITMQ_URL não configurado")
 	}
 
 	return nil

@@ -54,22 +54,25 @@ func (handler *PatientsHandler) CreatePatient(c *gin.Context) {
 }
 
 func (handler *PatientsHandler) UpdatePatient(c *gin.Context) {
-	id, err := uuid.Parse(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	var dto patient.PatientDTO
-	if err := c.ShouldBindJSON(&dto); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := handler.service.UpdatePatient(id, &dto); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.Status(http.StatusNoContent)
+    id, err := uuid.Parse(c.Param("id"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    var dto patient.PatientDTO
+    if err := c.ShouldBindJSON(&dto); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    updatedPatient, err := handler.service.UpdatePatient(id, &dto)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(http.StatusOK, updatedPatient)
 }
+
+
 
 func (handler *PatientsHandler) DeletePatient(c *gin.Context) {
 	id, err := uuid.Parse(c.Param("id"))

@@ -17,6 +17,18 @@ services:
     networks:
       - app-network
 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: diagier_clinics_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
   api:
     build: .
     container_name: microservice_diagier_clinics
@@ -26,12 +38,14 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
+      RABBITMQ_URL: ${RABBITMQ_URL}
     ports:
       - "8080:8080"
     volumes:
     - ./infrastructure/database/migrations:/app/infrastructure/database/migrations
     depends_on:
       - diagier_clinics_db
+      - rabbitmq
     networks:
       - app-network
 volumes:

@@ -4,15 +4,16 @@ import (
 	"net/http"
 
 	"github.com/Gierdiaz/diagier-clinics/internal/setup"
+	"github.com/Gierdiaz/diagier-clinics/pkg/messaging"
 	_ "github.com/Gierdiaz/diagier-clinics/pkg/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 )
 
-func Router(db *sqlx.DB) *gin.Engine {
-router := gin.Default()
+func Router(db *sqlx.DB, rabbitMQ *messaging.RabbitMQ) *gin.Engine {
+	router := gin.Default()
 
-	patientHandler := setup.SetupServices(db)
+	patientHandler := setup.SetupServices(db, rabbitMQ)
 	userHandler := setup.SetupUserServices(db)
 
 	v1 := router.Group("/api/v1")
