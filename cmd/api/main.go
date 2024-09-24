@@ -11,6 +11,7 @@ import (
 	"github.com/Gierdiaz/diagier-clinics/pkg/logger"
 	"github.com/Gierdiaz/diagier-clinics/pkg/messaging"
 	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"
+	"github.com/Gierdiaz/diagier-clinics/pkg/seeders"
 	"github.com/Gierdiaz/diagier-clinics/pkg/validator"
 )
 
@@ -51,6 +52,9 @@ func main() {
 	}
 
 	logger.Log("level", "info", "msg", "Migrations aplicadas com sucesso")
+
+	// Executando as seeds
+	seeders.RunSeeds(db)
 
 	// Inicializando a conexão RabbitMQ
 	rabbitMQ, err := messaging.NewRabbitMQ(config.RabbitMQ.URL) // Use a URL de conexão do RabbitMQ aqui
