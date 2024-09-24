@@ -4,16 +4,15 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
-// Definindo a estrutura do servidor
 type Server struct {
 	APP_SERVER string
 }
 
-// Definindo a estrutura do banco de dados
 type Database struct {
 	DB_HOST     string
 	DB_PORT     string
@@ -27,7 +26,6 @@ type JWT struct {
 	ExpHours int
 }
 
-// Definindo a estrutura do RabbitMQ
 type RabbitMQ struct {
 	URL string
 }
@@ -41,15 +39,17 @@ type Config struct {
 	RabbitMQ RabbitMQ
 }
 
-// Função para carregar o arquivo .env e preencher as configurações
 func LoadConfig() (*Config, error) {
-	// Carregar o arquivo .env
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
-	// Preenchendo a estrutura Config com as variáveis de ambiente
+	expHours, err := strconv.Atoi(os.Getenv("ExpHours"))
+	if err != nil {
+		expHours = 24
+	}
+
 	config := &Config{
 		Server: Server{
 			APP_SERVER: os.Getenv("APP_SERVER"),
@@ -63,14 +63,13 @@ func LoadConfig() (*Config, error) {
 		},
 		JWT: JWT{
 			Secret:   os.Getenv("JWT_SECRET"),
-			ExpHours: 24,
+			ExpHours: expHours,
 		},
 		RabbitMQ: RabbitMQ{
 			URL: os.Getenv("RABBITMQ_URL"),
 		},
 	}
 
-	// Validar as configurações
 	if err := validateConfig(config); err != nil {
 		return nil, err
 	}
@@ -78,9 +77,7 @@ func LoadConfig() (*Config, error) {
 	return config, nil
 }
 
-// Função para validar as configurações carregadas
 func validateConfig(cfg *Config) error {
-	// Validar o servidor
 	if cfg.Server.APP_SERVER == "" {
 		return errors.New("APP_SERVER não configurado")
 	}
