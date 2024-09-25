@@ -13,12 +13,10 @@ func InitValidator() {
 	validate = validator.New()
 }
 
-// Função para validar qualquer estrutura
 func Validate(i interface{}) error {
 	return validate.Struct(i)
 }
 
-// Função para validar o AuthRequest específico do registro
 func ValidateRegister(req user.AuthRequest) map[string]string {
 	err := validate.Struct(req)
 	if err != nil {
@@ -27,12 +25,11 @@ func ValidateRegister(req user.AuthRequest) map[string]string {
 	return nil
 }
 
-// Função auxiliar para traduzir erros de validação em mensagens amigáveis
 func TranslateValidationErrors(err error) map[string]string {
 	errs := make(map[string]string)
 	for _, err := range err.(validator.ValidationErrors) {
 		field := strings.ToLower(err.Field())
-		errs[field] = err.Tag() // Exemplo: retorna o nome da tag de validação como mensagem de erro
+		errs[field] = err.Tag()
 	}
 	return errs
 }
