@@ -26,17 +26,15 @@ func RunMigrate(db *sqlx.DB) error {
 	}
 
 	log.Println("Resetando as migrations...")
-	err = m.Down()
-	if err != nil && err != migrate.ErrNoChange {
+	if err = m.Down(); err != nil && err != migrate.ErrNoChange {
 		return errors.Wrap(err, "Erro ao reverter as migrations")
 	}
 
 	log.Println("Reaplicando as migrations...")
-	err = m.Up()
-	if err != nil && err != migrate.ErrNoChange {
+	if err = m.Up(); err != nil && err != migrate.ErrNoChange {
 		return errors.Wrap(err, "Erro ao reaplicar as migrations")
 	}
-
+	
 	log.Println("Migrations aplicadas com sucesso")
 	return nil
 }

@@ -80,8 +80,7 @@ func (service *patientService) UpdatePatient(id uuid.UUID, dto *PatientDTO) (*Pa
 }
 
 func (service *patientService) DeletePatient(id uuid.UUID) error {
-	err := service.repository.Delete(id)
-	if err != nil {
+	if err := service.repository.Delete(id); err != nil {
 		return err
 	}
 	return nil

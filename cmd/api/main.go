@@ -45,8 +45,7 @@ func main() {
 	logger.Log("level", "info", "msg", "Conexão com o banco de dados estabelecida")
 
 	// Executando as migrations
-	err = database.RunMigrate(db)
-	if err != nil {
+	if err = database.RunMigrate(db); err != nil {
 		logger.Log("level", "error", "msg", "EEEEEEEEErro ao aplicar as migrations", "error", err.Error())
 		os.Exit(1)
 	}
@@ -68,8 +67,7 @@ func main() {
 	router := endpoint.Router(db, rabbitMQ)
 
 	// Rodando o servidor HTTP na porta 8080
-	err = http.ListenAndServe(config.Server.APP_SERVER, router)
-	if err != nil {
+	if err = http.ListenAndServe(config.Server.APP_SERVER, router); err != nil {
 		logger.Log("level", "error", "msg", "Erro ao iniciar o servidor", err)
 		os.Exit(1)
 	}

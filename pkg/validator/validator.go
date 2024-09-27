@@ -18,8 +18,7 @@ func Validate(i interface{}) error {
 }
 
 func ValidateRegister(req user.AuthRequest) map[string]string {
-	err := validate.Struct(req)
-	if err != nil {
+	if err := validate.Struct(req); err != nil {
 		return TranslateValidationErrors(err)
 	}
 	return nil
