@@ -13,14 +13,14 @@ import (
 func SeedPatients(repository patient.PatientRepository) error {
 
 	existingPatients, err := repository.Index()
-    if err != nil {
-        return fmt.Errorf("erro ao verificar se há pacientes existentes: %v", err)
-    }
+	if err != nil {
+		return fmt.Errorf("erro ao verificar se há pacientes existentes: %v", err)
+	}
 
-    if len(existingPatients) > 0 {
-        log.Println("A tabela de pacientes já está populada. Seed não será executado.")
-        return nil
-    }
+	if len(existingPatients) > 0 {
+		log.Println("A tabela de pacientes já está populada. Seed não será executado.")
+		return nil
+	}
 
 	patients := []*patient.Patient{
 		{
