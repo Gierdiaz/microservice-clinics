@@ -1,0 +1,6 @@
+# 1. permissões de execução (bash)
+chmod +x .githooks/pre-commit
+
+# 2. Configuração do Git para usar o diretório '.githooks' para os hooks (powershell)
+git config core.hooksPath .githooks
+
