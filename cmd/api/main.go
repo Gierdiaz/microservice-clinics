@@ -56,7 +56,9 @@ func main() {
 	logger.Log("level", "info", "msg", "Migrations aplicadas com sucesso")
 
 	// Executando as seeds
-	seeders.RunSeeds(db)
+	if err := seeders.RunSeeds(db); err != nil {
+		logger.Log("level", "error", "msg", "Erro ao executar as seeds", "error", err)
+	}
 
 	// Tentando conectar ao RabbitMQ
 	logger.Log("level", "info", "msg", "Tentando conectar ao RabbitMQ", "url", config.RabbitMQ.URL)
