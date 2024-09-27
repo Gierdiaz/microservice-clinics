@@ -1,3 +1,2 @@
 .env
-
-.docker_db
+docker_db.md

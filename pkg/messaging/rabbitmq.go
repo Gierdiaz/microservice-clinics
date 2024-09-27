@@ -41,10 +41,10 @@ func (rabbit *RabbitMQ) Publish(queue string, body []byte) error {
 	}
 
 	err = rabbit.Channel.Publish(
-		"",     // exchange
-		queue,  // chave de roteamento
-		false,  // obrigatório
-		false,  // imediato
+		"",    // exchange
+		queue, // chave de roteamento
+		false, // obrigatório
+		false, // imediato
 		amqp091.Publishing{
 			ContentType: "application/json",
 			Body:        body,

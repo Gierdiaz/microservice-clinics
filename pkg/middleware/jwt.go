@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"github.com/Gierdiaz/diagier-clinics/config"
-	"time"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"time"
 )
 
 var cfg *config.Config

@@ -36,12 +36,12 @@ func (repo *patientRepository) Index() ([]*Patient, error) {
 func (repo *patientRepository) Show(id uuid.UUID) (*Patient, error) {
 	var patient Patient
 	err := repo.db.Get(&patient, "SELECT * FROM patients WHERE id = $1", id)
-    if err != nil {
-        if err == sql.ErrNoRows {
-            return nil, fmt.Errorf("patient with id %s not found", id)
-        }
-        return nil, err
-    }
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("patient with id %s not found", id)
+		}
+		return nil, err
+	}
 	return &patient, nil
 }
 
@@ -54,13 +54,12 @@ func (repo *patientRepository) Store(patient *Patient) (*Patient, error) {
 }
 
 func (repo *patientRepository) Update(patient *Patient) (*Patient, error) {
-    _, err := repo.db.NamedExec(`UPDATE patients SET name = :name, age = :age, gender = :gender, address = :address, phone = :phone, email = :email, observations = :observations, updated_at = :updated_at WHERE id =:id`, patient)
-    if err != nil {
-        return nil, err
-    }
-    return patient, nil
+	_, err := repo.db.NamedExec(`UPDATE patients SET name = :name, age = :age, gender = :gender, address = :address, phone = :phone, email = :email, observations = :observations, updated_at = :updated_at WHERE id =:id`, patient)
+	if err != nil {
+		return nil, err
+	}
+	return patient, nil
 }
-
 
 func (repo *patientRepository) Delete(id uuid.UUID) error {
 	_, err := repo.db.Exec("DELETE FROM patients WHERE id = $1", id)
@@ -69,4 +68,3 @@ func (repo *patientRepository) Delete(id uuid.UUID) error {
 	}
 	return nil
 }
-

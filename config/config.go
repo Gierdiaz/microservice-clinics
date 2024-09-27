@@ -30,7 +30,6 @@ type RabbitMQ struct {
 	URL string
 }
 
-
 // Estrutura principal de configuração
 type Config struct {
 	Server   Server

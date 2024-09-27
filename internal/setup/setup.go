@@ -8,7 +8,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-
 func SetupServices(db *sqlx.DB, rabbit *messaging.RabbitMQ) *handler.PatientsHandler {
 	patientRepo := patient.NewPatientRepository(db)
 	patientService := patient.NewPatientService(patientRepo, rabbit)
@@ -17,8 +16,8 @@ func SetupServices(db *sqlx.DB, rabbit *messaging.RabbitMQ) *handler.PatientsHan
 }
 
 func SetupUserServices(db *sqlx.DB) *handler.UserHandler {
-    userRepo := user.NewUserRepository(db)
-    userService := user.NewService(userRepo)
-    userHandler := handler.NewUserHandler(userService)
-    return userHandler
+	userRepo := user.NewUserRepository(db)
+	userService := user.NewService(userRepo)
+	userHandler := handler.NewUserHandler(userService)
+	return userHandler
 }
