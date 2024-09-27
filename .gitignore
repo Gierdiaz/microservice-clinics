@@ -1,2 +1,3 @@
-.env
 docker.md
+.env
+.env.sample
