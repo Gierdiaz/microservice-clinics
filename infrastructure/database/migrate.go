@@ -34,7 +34,7 @@ func RunMigrate(db *sqlx.DB) error {
 	if err = m.Up(); err != nil && err != migrate.ErrNoChange {
 		return errors.Wrap(err, "Erro ao reaplicar as migrations")
 	}
-	
+
 	log.Println("Migrations aplicadas com sucesso")
 	return nil
 }

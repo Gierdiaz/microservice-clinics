@@ -21,7 +21,7 @@ func InitDatabase(config *config.Config) (*sqlx.DB, error) {
 	if err = db.Ping(); err != nil {
 		return nil, fmt.Errorf("erro ao pingar o banco de dados: %w", err)
 	}
-	
+
 	log.Println("Conexão com PostgreSQL estabelecida com sucesso")
 	return db, nil
 }

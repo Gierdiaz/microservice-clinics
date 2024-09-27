@@ -27,7 +27,8 @@ func NewPatientRepository(db *sqlx.DB) PatientRepository {
 func (repo *patientRepository) Index() ([]*Patient, error) {
 	var patients []*Patient
 	if err := repo.db.Select(&patients, "SELECT * FROM patients"); err != nil {
-		return nil, err}
+		return nil, err
+	}
 	return patients, nil
 }
 
