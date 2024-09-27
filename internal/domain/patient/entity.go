@@ -1,10 +1,10 @@
 package patient
 
 import (
+	"fmt"
 	"regexp"
 	"time"
 
-	"github.com/Gierdiaz/diagier-clinics/pkg/errors"
 	"github.com/google/uuid"
 )
 
@@ -21,34 +21,53 @@ type Patient struct {
 	UpdatedAt    time.Time `db:"updated_at" json:"updated_at"`
 }
 
+// Erros específicos de validação do domínio Patient
+var (
+	ErrInvalidName    = "o nome deve ter entre 3 e 100 caracteres"
+	ErrInvalidAge     = "a idade deve estar entre 1 e 150 anos"
+	ErrInvalidGender  = "o gênero deve ser 'masculino', 'feminino' ou 'outro'"
+	ErrInvalidAddress = "o endereço deve ter entre 3 e 100 caracteres"
+	ErrInvalidPhone   = "o número de telefone deve seguir o formato internacional (+55XXXXXXXXXX)"
+	ErrInvalidEmail   = "o email deve estar preenchido e seguir o formato padrão (exemplo@dominio.com)"
+)
+
+type ValidationError struct {
+	Field   string
+	Message string
+}
+
+func (e *ValidationError) Error() string {
+	return fmt.Sprintf("campo '%s': %s", e.Field, e.Message)
+}
+
 // Validate checks for the validity of Patient fields
 func (p *Patient) Validate() error {
 	if len(p.Name) < 3 || len(p.Name) > 100 {
-		return &errors.ValidationError{Field: "name", Message: errors.ErrInvalidName}
+		return &ValidationError{Field: "name", Message: ErrInvalidName}
 	}
 
 	if p.Age < 0 || p.Age > 150 {
-		return &errors.ValidationError{Field: "age", Message: errors.ErrInvalidAge}
+		return &ValidationError{Field: "age", Message: ErrInvalidAge}
 	}
 
 	if p.Gender != "masculino" && p.Gender != "feminino" && p.Gender != "outro" {
-		return &errors.ValidationError{Field: "gender", Message: errors.ErrInvalidGender}
+		return &ValidationError{Field: "gender", Message: ErrInvalidGender}
 	}
 
 	if len(p.Address) < 3 || len(p.Address) > 100 {
-		return &errors.ValidationError{Field: "address", Message: errors.ErrInvalidAddress}
+		return &ValidationError{Field: "address", Message: ErrInvalidAddress}
 	}
 
 	if len(p.Phone) == 0 {
-		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}
+		return &ValidationError{Field: "phone", Message: ErrInvalidPhone}
 	}
 	e164Regex := regexp.MustCompile(`^\+?[1-9]\d{1,14}$`)
 	if !e164Regex.MatchString(p.Phone) {
-		return &errors.ValidationError{Field: "phone", Message: errors.ErrInvalidPhone}
+		return &ValidationError{Field: "phone", Message: ErrInvalidPhone}
 	}
 
 	if len(p.Email) == 0 {
-		return &errors.ValidationError{Field: "email", Message: errors.ErrInvalidEmail}
+		return &ValidationError{Field: "email", Message: ErrInvalidEmail}
 	}
 
 	return nil
