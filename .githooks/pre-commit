@@ -1,22 +1,16 @@
 #!/bin/bash
 
-# Rodar gofmt em todos os arquivos Go e verificar se há arquivos que precisam de formatação
-echo "Checking Go file formatting..."
-unformatted_files=$(gofmt -l ./...)
+# Rodar go fmt em todos os arquivos Go
+echo "Running go fmt..."
+go fmt ./...
 
-# Se não houver arquivos não formatados, apenas informar
-if [ -z "$unformatted_files" ]; then
-  echo "All Go files are properly formatted."
-else
-  echo "Running gofmt on unformatted files..."
-  gofmt -w $unformatted_files  # Aplica a formatação
-  if [ $? -ne 0 ]; then
-    echo "gofmt failed. Please fix the formatting issues."
-    exit 1
-  fi
-  echo "Formatted the following files:"
-  echo "$unformatted_files"
+# Se go fmt não formatar algo corretamente, o commit falha
+if [ $? -ne 0 ]; then
+  echo "go fmt failed. Please fix the formatting issues."
+  exit 1
 fi
+
+echo "All files are formatted."
 
 # Rodar testes da pasta test
 echo "Running go tests..."
