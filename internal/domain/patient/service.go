@@ -3,7 +3,6 @@ package patient
 import (
 	"encoding/json"
 	"log"
-	"time"
 
 	"github.com/Gierdiaz/diagier-clinics/pkg/messaging"
 	"github.com/google/uuid"
@@ -45,7 +44,7 @@ func (service *patientService) CreatePatient(patient *Patient) (*Patient, error)
 
 	message, _ := json.Marshal(createdPatient)
 	if err := service.rabbitMQ.Publish("patients", message); err != nil {
-		log.Printf("Erro ao publicar a mensagem: %s", err)
+		log.Printf("Error publishing message: %s", err)
 	}
 
 	return createdPatient, nil
@@ -64,7 +63,6 @@ func (service *patientService) UpdatePatient(id uuid.UUID, patient *Patient) (*P
 	existingPatient.Phone = patient.Phone
 	existingPatient.Email = patient.Email
 	existingPatient.Observations = patient.Observations
-	existingPatient.UpdatedAt = time.Now()
 
 	if err := existingPatient.Validate(); err != nil {
 		return nil, err
@@ -77,7 +75,7 @@ func (service *patientService) UpdatePatient(id uuid.UUID, patient *Patient) (*P
 
 	message, _ := json.Marshal(updatedPatient)
 	if err := service.rabbitMQ.Publish("patients_update", message); err != nil {
-		log.Printf("Erro ao publicar a mensagem de atualização: %s", err)
+		log.Printf("Error publishing update message: %s", err)
 	}
 
 	return updatedPatient, nil
