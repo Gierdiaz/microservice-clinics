@@ -11,4 +11,3 @@ type PatientRepository interface {
 	Update(patient *Patient) (*Patient, error)
 	Delete(id uuid.UUID) error
 }
-
