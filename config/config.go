@@ -2,7 +2,7 @@ package config
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"os"
 	"strconv"
 
@@ -39,9 +39,8 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+	if err := godotenv.Load(); err != nil {
+		return nil, fmt.Errorf("error loading .env file: %w", err)
 	}
 
 	expHours, err := strconv.Atoi(os.Getenv("ExpHours"))
@@ -70,7 +69,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	if err := validateConfig(config); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("invalid configuration: %w", err)
 	}
 
 	return config, nil
