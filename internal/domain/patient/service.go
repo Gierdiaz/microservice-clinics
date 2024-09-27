@@ -12,8 +12,8 @@ import (
 type PatientService interface {
 	GetAllPatients() ([]*Patient, error)
 	GetPatientByID(id uuid.UUID) (*Patient, error)
-	CreatePatient(dto *PatientDTO) (*Patient, error)
-	UpdatePatient(id uuid.UUID, dto *PatientDTO) (*Patient, error)
+	CreatePatient(patient *Patient) (*Patient, error)
+	UpdatePatient(id uuid.UUID, patient *Patient) (*Patient, error) 
 	DeletePatient(id uuid.UUID) error
 }
 
@@ -34,8 +34,7 @@ func (service *patientService) GetPatientByID(id uuid.UUID) (*Patient, error) {
 	return service.repository.Show(id)
 }
 
-func (service *patientService) CreatePatient(dto *PatientDTO) (*Patient, error) {
-	patient := dto.ToEntity()
+func (service *patientService) CreatePatient(patient *Patient) (*Patient, error) {
 	if err := patient.Validate(); err != nil {
 		return nil, err
 	}
@@ -46,27 +45,32 @@ func (service *patientService) CreatePatient(dto *PatientDTO) (*Patient, error) 
 
 	message, _ := json.Marshal(createdPatient)
 	if err := service.rabbitMQ.Publish("patients", message); err != nil {
-		log.Printf("Error ao publicar a mensagem: %s", err)
+		log.Printf("Erro ao publicar a mensagem: %s", err)
 	}
 
 	return createdPatient, nil
 }
 
-func (service *patientService) UpdatePatient(id uuid.UUID, dto *PatientDTO) (*Patient, error) {
-	patient, err := service.repository.Show(id)
+func (service *patientService) UpdatePatient(id uuid.UUID, patient *Patient) (*Patient, error) {
+	existingPatient, err := service.repository.Show(id)
 	if err != nil {
 		return nil, err
 	}
 
-	updatedPatient := dto.ToEntity()
-	updatedPatient.ID = patient.ID
-	updatedPatient.UpdatedAt = time.Now()
+	existingPatient.Name = patient.Name
+	existingPatient.Age = patient.Age
+	existingPatient.Gender = patient.Gender
+	existingPatient.Address = patient.Address
+	existingPatient.Phone = patient.Phone
+	existingPatient.Email = patient.Email
+	existingPatient.Observations = patient.Observations
+	existingPatient.UpdatedAt = time.Now()
 
-	if err := updatedPatient.Validate(); err != nil {
+	if err := existingPatient.Validate(); err != nil {
 		return nil, err
 	}
 
-	updatedPatient, err = service.repository.Update(updatedPatient)
+	updatedPatient, err := service.repository.Update(existingPatient)
 	if err != nil {
 		return nil, err
 	}
@@ -80,8 +84,5 @@ func (service *patientService) UpdatePatient(id uuid.UUID, dto *PatientDTO) (*Pa
 }
 
 func (service *patientService) DeletePatient(id uuid.UUID) error {
-	if err := service.repository.Delete(id); err != nil {
-		return err
-	}
-	return nil
+	return service.repository.Delete(id)
 }

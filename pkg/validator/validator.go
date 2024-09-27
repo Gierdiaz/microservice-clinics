@@ -3,7 +3,7 @@ package validator
 import (
 	"strings"
 
-	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -17,7 +17,7 @@ func Validate(i interface{}) error {
 	return validate.Struct(i)
 }
 
-func ValidateRegister(req user.AuthRequest) map[string]string {
+func ValidateRegister(req userApplication.AuthRequest) map[string]string {
 	if err := validate.Struct(req); err != nil {
 		return TranslateValidationErrors(err)
 	}
