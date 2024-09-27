@@ -13,7 +13,7 @@ type PatientService interface {
 	GetAllPatients() ([]*Patient, error)
 	GetPatientByID(id uuid.UUID) (*Patient, error)
 	CreatePatient(patient *Patient) (*Patient, error)
-	UpdatePatient(id uuid.UUID, patient *Patient) (*Patient, error) 
+	UpdatePatient(id uuid.UUID, patient *Patient) (*Patient, error)
 	DeletePatient(id uuid.UUID) error
 }
 

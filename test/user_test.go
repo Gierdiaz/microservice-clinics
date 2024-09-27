@@ -9,8 +9,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
 	"github.com/Gierdiaz/diagier-clinics/config"
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/handler"
 	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"

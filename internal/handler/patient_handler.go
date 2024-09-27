@@ -65,7 +65,7 @@ func (handler *PatientsHandler) UpdatePatient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	patient.ID = id 
+	patient.ID = id
 
 	updatedPatient, err := handler.service.UpdatePatient(id, &patient)
 	if err != nil {
