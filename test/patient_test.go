@@ -35,19 +35,19 @@ func (m *mockPatientService) GetPatientByID(id uuid.UUID) (*patient.Patient, err
 	}, nil
 }
 
-func (m *mockPatientService) CreatePatient(dto *patient.PatientDTO) (*patient.Patient, error) {
+func (m *mockPatientService) CreatePatient(p *patient.Patient) (*patient.Patient, error) {
 	return &patient.Patient{
 		ID:   uuid.New(),
-		Name: dto.Name,
-		Age:  dto.Age,
+		Name: p.Name,
+		Age:  p.Age,
 	}, nil
 }
 
-func (m *mockPatientService) UpdatePatient(id uuid.UUID, dto *patient.PatientDTO) (*patient.Patient, error) {
+func (m *mockPatientService) UpdatePatient(id uuid.UUID, p *patient.Patient) (*patient.Patient, error) {
 	return &patient.Patient{
 		ID:   id,
-		Name: dto.Name,
-		Age:  dto.Age,
+		Name: p.Name,
+		Age:  p.Age,
 	}, nil
 }
 
@@ -101,11 +101,11 @@ func TestCreatePatient(t *testing.T) {
 
 	r.POST("/patients", handler.CreatePatient)
 
-	patientDTO := &patient.PatientDTO{
+	patient := &patient.Patient{
 		Name: "Jane Doe",
 		Age:  28,
 	}
-	body, _ := json.Marshal(patientDTO)
+	body, _ := json.Marshal(patient)
 
 	req, _ := http.NewRequest(http.MethodPost, "/patients", bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
@@ -127,11 +127,11 @@ func TestUpdatePatient(t *testing.T) {
 	id := uuid.New()
 	r.PUT("/patients/:id", handler.UpdatePatient)
 
-	patientDTO := &patient.PatientDTO{
+	patient := &patient.Patient{
 		Name: "Jane Doe",
 		Age:  29,
 	}
-	body, _ := json.Marshal(patientDTO)
+	body, _ := json.Marshal(patient)
 
 	req, _ := http.NewRequest(http.MethodPut, "/patients/"+id.String(), bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")

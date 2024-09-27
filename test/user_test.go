@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/Gierdiaz/diagier-clinics/config"
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/handler"
 	"github.com/Gierdiaz/diagier-clinics/pkg/middleware"
@@ -57,7 +58,7 @@ func TestRegister(t *testing.T) {
 	router := gin.Default()
 	router.POST("/register", handler.Register)
 
-	registerBody := user.AuthRequest{
+	registerBody := userApplication.AuthRequest{
 		Email:    "testuser@example.com",
 		Password: "securepassword",
 	}
@@ -95,7 +96,7 @@ func TestLogin(t *testing.T) {
 	router := gin.Default()
 	router.POST("/login", handler.Login)
 
-	loginBody := user.AuthRequest{
+	loginBody := userApplication.AuthRequest{
 		Email:    "testuser@example.com",
 		Password: "securepassword",
 	}
@@ -108,7 +109,7 @@ func TestLogin(t *testing.T) {
 	router.ServeHTTP(recorder, req)
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
-	var response user.AuthResponse
+	var response userApplication.AuthResponse
 	err := json.Unmarshal(recorder.Body.Bytes(), &response)
 	assert.NoError(t, err)
 

@@ -40,17 +40,18 @@ func (handler *PatientsHandler) GetPatientByID(c *gin.Context) {
 }
 
 func (handler *PatientsHandler) CreatePatient(c *gin.Context) {
-	var dto patient.PatientDTO
-	if err := c.ShouldBindJSON(&dto); err != nil {
+	var patient patient.Patient
+	if err := c.ShouldBindJSON(&patient); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	patient, err := handler.service.CreatePatient(&dto)
+
+	createdPatient, err := handler.service.CreatePatient(&patient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, patient)
+	c.JSON(http.StatusCreated, createdPatient)
 }
 
 func (handler *PatientsHandler) UpdatePatient(c *gin.Context) {
@@ -59,12 +60,14 @@ func (handler *PatientsHandler) UpdatePatient(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var dto patient.PatientDTO
-	if err := c.ShouldBindJSON(&dto); err != nil {
+	var patient patient.Patient
+	if err := c.ShouldBindJSON(&patient); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	updatedPatient, err := handler.service.UpdatePatient(id, &dto)
+	patient.ID = id
+
+	updatedPatient, err := handler.service.UpdatePatient(id, &patient)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

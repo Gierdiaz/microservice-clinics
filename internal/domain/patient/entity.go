@@ -72,3 +72,26 @@ func (p *Patient) Validate() error {
 
 	return nil
 }
+
+func NewPatient(name string, age int, gender, address, phone, email, observations string) (*Patient, error) {
+	id := uuid.New()
+
+	p := &Patient{
+		ID:           id,
+		Name:         name,
+		Age:          age,
+		Gender:       gender,
+		Address:      address,
+		Phone:        phone,
+		Email:        email,
+		Observations: observations,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}
+
+	if err := p.Validate(); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}

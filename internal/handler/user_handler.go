@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
 	"github.com/Gierdiaz/diagier-clinics/pkg/validator"
 	"github.com/gin-gonic/gin"
@@ -18,7 +19,7 @@ func NewUserHandler(service user.UserService) *UserHandler {
 }
 
 func (h *UserHandler) Register(c *gin.Context) {
-	var req user.AuthRequest
+	var req userApplication.AuthRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input", "error": err.Error()})
 		return
@@ -39,7 +40,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 }
 
 func (h *UserHandler) Login(c *gin.Context) {
-	var req user.AuthRequest
+	var req userApplication.AuthRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		fmt.Println("Erro ao fazer bind do JSON:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid input", "error": err.Error()})
@@ -56,5 +57,5 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	fmt.Println("Login bem-sucedido, retornando token.")
-	c.JSON(http.StatusOK, user.AuthResponse{Token: token})
+	c.JSON(http.StatusOK, userApplication.AuthResponse{Token: token})
 }
