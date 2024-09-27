@@ -26,10 +26,8 @@ func NewPatientRepository(db *sqlx.DB) PatientRepository {
 
 func (repo *patientRepository) Index() ([]*Patient, error) {
 	var patients []*Patient
-	err := repo.db.Select(&patients, "SELECT * FROM patients")
-	if err != nil {
-		return nil, err
-	}
+	if err := repo.db.Select(&patients, "SELECT * FROM patients"); err != nil {
+		return nil, err}
 	return patients, nil
 }
 
@@ -62,8 +60,7 @@ func (repo *patientRepository) Update(patient *Patient) (*Patient, error) {
 }
 
 func (repo *patientRepository) Delete(id uuid.UUID) error {
-	_, err := repo.db.Exec("DELETE FROM patients WHERE id = $1", id)
-	if err != nil {
+	if _, err := repo.db.Exec("DELETE FROM patients WHERE id = $1", id); err != nil {
 		return err
 	}
 	return nil
