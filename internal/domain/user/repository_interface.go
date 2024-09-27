@@ -1,6 +1,8 @@
 package user
 
-import ("context")
+import (
+	"context"
+)
 
 type UserRepository interface {
 	Email(ctx context.Context, email string) (*User, error)
