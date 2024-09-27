@@ -56,7 +56,7 @@ func (s *service) Register(ctx context.Context, email, password string) error {
 
 	user := &User{
 		ID:       uuid.New(),
-		Email:     email,   
+		Email:    email,
 		Password: string(hashedPassword),
 	}
 

@@ -53,32 +53,31 @@ func (service *patientService) CreatePatient(dto *PatientDTO) (*Patient, error) 
 }
 
 func (service *patientService) UpdatePatient(id uuid.UUID, dto *PatientDTO) (*Patient, error) {
-    patient, err := service.repository.Show(id)
-    if err != nil {
-        return nil, err
-    }
+	patient, err := service.repository.Show(id)
+	if err != nil {
+		return nil, err
+	}
 
-    updatedPatient := dto.ToEntity()
-    updatedPatient.ID = patient.ID
-    updatedPatient.UpdatedAt = time.Now()
+	updatedPatient := dto.ToEntity()
+	updatedPatient.ID = patient.ID
+	updatedPatient.UpdatedAt = time.Now()
 
-    if err := updatedPatient.Validate(); err != nil {
-        return nil, err
-    }
+	if err := updatedPatient.Validate(); err != nil {
+		return nil, err
+	}
 
-    updatedPatient, err = service.repository.Update(updatedPatient)
-    if err != nil {
-        return nil, err
-    }
+	updatedPatient, err = service.repository.Update(updatedPatient)
+	if err != nil {
+		return nil, err
+	}
 
-    message, _ := json.Marshal(updatedPatient)
-    if err := service.rabbitMQ.Publish("patients_update", message); err != nil {
-        log.Printf("Erro ao publicar a mensagem de atualização: %s", err)
-    }
+	message, _ := json.Marshal(updatedPatient)
+	if err := service.rabbitMQ.Publish("patients_update", message); err != nil {
+		log.Printf("Erro ao publicar a mensagem de atualização: %s", err)
+	}
 
-    return updatedPatient, nil
+	return updatedPatient, nil
 }
-
 
 func (service *patientService) DeletePatient(id uuid.UUID) error {
 	err := service.repository.Delete(id)

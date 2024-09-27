@@ -27,11 +27,9 @@ func (r *userRepository) Email(ctx context.Context, email string) (*User, error)
 	return &user, nil
 }
 
-
 func (r *userRepository) Create(ctx context.Context, user *User) error {
 	_, err := r.db.NamedExecContext(ctx, `
 		INSERT INTO users (id, name, email, password, created_at, updated_at) 
 		VALUES (:id, :name, :email, :password, NOW(), NOW())`, user)
 	return err
 }
-

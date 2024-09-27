@@ -1,0 +1,24 @@
+#!/bin/sh
+# Rodar go fmt em todos os arquivos Go
+echo "Running go fmt..."
+go fmt ./...
+
+# Se go fmt não formatar algo corretamente, o commit falha
+if [ $? -ne 0 ]; then
+  echo "go fmt failed. Please fix the formatting issues."
+  exit 1
+fi
+
+echo "All files are formatted."
+
+# Rodar testes da pasta test
+echo "Running go tests..."
+go test ./test/...
+
+# Se algum teste falhar, o commit é cancelado
+if [ $? -ne 0 ]; then
+  echo "Some tests failed. Please fix the errors."
+  exit 1
+fi
+
+echo "All tests passed."

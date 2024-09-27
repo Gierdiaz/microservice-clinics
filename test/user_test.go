@@ -48,32 +48,32 @@ func (m *mockUserService) Register(ctx context.Context, email, password string) 
 }
 
 func TestRegister(t *testing.T) {
-    validator.InitValidator()
+	validator.InitValidator()
 
-    userService := newMockUserService()
-    handler := handler.NewUserHandler(userService)
+	userService := newMockUserService()
+	handler := handler.NewUserHandler(userService)
 
-    gin.SetMode(gin.TestMode)
-    router := gin.Default()
-    router.POST("/register", handler.Register)
+	gin.SetMode(gin.TestMode)
+	router := gin.Default()
+	router.POST("/register", handler.Register)
 
-    registerBody := user.AuthRequest{
-        Email:    "testuser@example.com",
-        Password: "securepassword",
-    }
-    bodyBytes, _ := json.Marshal(registerBody)
+	registerBody := user.AuthRequest{
+		Email:    "testuser@example.com",
+		Password: "securepassword",
+	}
+	bodyBytes, _ := json.Marshal(registerBody)
 
-    req, _ := http.NewRequest(http.MethodPost, "/register", bytes.NewBuffer(bodyBytes))
-    req.Header.Set("Content-Type", "application/json")
+	req, _ := http.NewRequest(http.MethodPost, "/register", bytes.NewBuffer(bodyBytes))
+	req.Header.Set("Content-Type", "application/json")
 
-    recorder := httptest.NewRecorder()
-    router.ServeHTTP(recorder, req)
+	recorder := httptest.NewRecorder()
+	router.ServeHTTP(recorder, req)
 
-    assert.Equal(t, http.StatusCreated, recorder.Code)
-    var response map[string]string
-    err := json.Unmarshal(recorder.Body.Bytes(), &response)
-    assert.NoError(t, err)
-    assert.Equal(t, "User registered successfully", response["message"])
+	assert.Equal(t, http.StatusCreated, recorder.Code)
+	var response map[string]string
+	err := json.Unmarshal(recorder.Body.Bytes(), &response)
+	assert.NoError(t, err)
+	assert.Equal(t, "User registered successfully", response["message"])
 }
 
 func TestLogin(t *testing.T) {
@@ -114,4 +114,3 @@ func TestLogin(t *testing.T) {
 
 	assert.NotEmpty(t, response.Token)
 }
-

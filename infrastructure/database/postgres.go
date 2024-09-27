@@ -10,7 +10,7 @@ import (
 )
 
 func InitDatabase(config *config.Config) (*sqlx.DB, error) {
-	
+
 	dsn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.Database.DB_HOST, config.Database.DB_PORT, config.Database.DB_USER, config.Database.DB_NAME, config.Database.DB_PASSWORD)
 
 	db, err := sqlx.Connect("postgres", dsn)
