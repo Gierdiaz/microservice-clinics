@@ -1,6 +1,8 @@
 package setup
 
 import (
+	patientRepo  "github.com/Gierdiaz/diagier-clinics/infrastructure/repositories/patient"
+	userRepo "github.com/Gierdiaz/diagier-clinics/infrastructure/repositories/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/patient"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
 	"github.com/Gierdiaz/diagier-clinics/internal/handler"
@@ -9,15 +11,15 @@ import (
 )
 
 func SetupServices(db *sqlx.DB, rabbit *messaging.RabbitMQ) *handler.PatientsHandler {
-	patientRepo := patient.NewPatientRepository(db)
-	patientService := patient.NewPatientService(patientRepo, rabbit)
+	patientRepository  := patientRepo.NewPatientRepository(db)
+	patientService := patient.NewPatientService(patientRepository , rabbit)
 	patientHandler := handler.NewPatientsHandler(patientService)
 	return patientHandler
 }
 
 func SetupUserServices(db *sqlx.DB) *handler.UserHandler {
-	userRepo := user.NewUserRepository(db)
-	userService := user.NewService(userRepo)
+	userRepository  := userRepo.NewUserRepository(db)
+	userService := user.NewService(userRepository )
 	userHandler := handler.NewUserHandler(userService)
 	return userHandler
 }
