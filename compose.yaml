@@ -32,7 +32,9 @@ services:
       - app-network
 
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Containerfile
     container_name: microservice_diagier_clinics
     environment:
       DB_HOST: diagier_clinics_db
@@ -44,12 +46,23 @@ services:
     ports:
       - "8080:8080"
     volumes:
-    - ./infrastructure/database/migrations:/app/infrastructure/database/migrations
+      - ./infrastructure/database/migrations:/app/infrastructure/database/migrations
     depends_on:
       - diagier_clinics_db
       - rabbitmq
     networks:
       - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: diagier_clinics_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./container/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
 
