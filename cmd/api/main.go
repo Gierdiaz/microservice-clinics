@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -30,7 +29,7 @@ func main() {
 		os.Exit(1)
 	}
 	logger.Log("level", "info", "msg", "Configurações carregadas com sucesso", "port: ", config.Database.DB_PORT)
-	fmt.Printf("Conectando na porta %s...\n", config.Database.DB_PORT)
+	logger.Log("level", "info", "msg", "Conectando na porta", "port", config.Database.DB_PORT)
 
 	// Inicializando o validador
 	validator.InitValidator()
@@ -59,13 +58,15 @@ func main() {
 	// Executando as seeds
 	seeders.RunSeeds(db)
 
-	// Inicializando a conexão RabbitMQ
-	rabbitMQ, err := messaging.NewRabbitMQ(config.RabbitMQ.URL) // Use a URL de conexão do RabbitMQ aqui
+	// Tentando conectar ao RabbitMQ
+	logger.Log("level", "info", "msg", "Tentando conectar ao RabbitMQ", "url", config.RabbitMQ.URL)
+	rabbitMQ, err := messaging.NewRabbitMQ(config.RabbitMQ.URL)
 	if err != nil {
-		logger.Log("level", "info", "msg", "Conectando ao RabbitMQ", "url", config.RabbitMQ.URL)
+		logger.Log("level", "error", "msg", "Erro ao conectar ao RabbitMQ", "url", config.RabbitMQ.URL, "err", err)
 		os.Exit(1)
 	}
-	defer rabbitMQ.Close() // Fechar a conexão ao finalizar o programa
+	defer rabbitMQ.Close()
+	logger.Log("level", "info", "msg", "Conexão ao RabbitMQ estabelecida com sucesso")
 
 	// Inicializando o roteador Gin
 	router := endpoint.Router(db, rabbitMQ)
