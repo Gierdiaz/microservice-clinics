@@ -50,7 +50,7 @@ func main() {
 
 	// Executando as migrations
 	if err = database.RunMigrate(db); err != nil {
-		logger.Log("level", "error", "msg", "EEEEEEEEErro ao aplicar as migrations", "error", err.Error())
+		logger.Log("level", "error", "msg", "Erro ao aplicar as migrations", "error", err.Error())
 		os.Exit(1)
 	}
 
