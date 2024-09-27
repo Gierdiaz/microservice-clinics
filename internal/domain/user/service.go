@@ -9,21 +9,21 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type Service interface {
+type UserService interface {
 	Authenticate(ctx context.Context, email, password string) (string, error)
 	Register(ctx context.Context, email, password string) error
 }
 
-type service struct {
-	repo UserRepository
+type userService struct {
+	repository UserRepository
 }
 
-func NewService(repo UserRepository) Service {
-	return &service{repo: repo}
+func NewUserService(repo UserRepository) UserService {
+	return &userService{repository: repo}
 }
 
-func (s *service) Authenticate(ctx context.Context, email, password string) (string, error) {
-	user, err := s.repo.Email(ctx, email)
+func (s *userService) Authenticate(ctx context.Context, email, password string) (string, error) {
+	user, err := s.repository.Email(ctx, email)
 	if err != nil || user == nil {
 		fmt.Println("Erro ao buscar o usuário:", err)
 		return "", err
@@ -47,7 +47,7 @@ func (s *service) Authenticate(ctx context.Context, email, password string) (str
 	return token, nil
 }
 
-func (s *service) Register(ctx context.Context, email, password string) error {
+func (s *userService) Register(ctx context.Context, email, password string) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println("Erro ao criptografar senha:", err)
@@ -62,7 +62,7 @@ func (s *service) Register(ctx context.Context, email, password string) error {
 
 	fmt.Println("Registrando usuário com email:", user.Email, " | Senha criptografada:", user.Password)
 
-	err = s.repo.Create(ctx, user)
+	err = s.repository.Create(ctx, user)
 	if err != nil {
 		fmt.Println("Erro ao criar usuário no banco de dados:", err)
 		return err

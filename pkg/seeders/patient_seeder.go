@@ -6,10 +6,22 @@ import (
 	"time"
 
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/patient"
+
 	"github.com/google/uuid"
 )
 
-func SeedPatients(repo patient.PatientRepository) error {
+func SeedPatients(repository patient.PatientRepository) error {
+
+	existingPatients, err := repository.Index()
+    if err != nil {
+        return fmt.Errorf("erro ao verificar se há pacientes existentes: %v", err)
+    }
+
+    if len(existingPatients) > 0 {
+        log.Println("A tabela de pacientes já está populada. Seed não será executado.")
+        return nil
+    }
+
 	patients := []*patient.Patient{
 		{
 			ID:           uuid.New(),
@@ -50,7 +62,7 @@ func SeedPatients(repo patient.PatientRepository) error {
 	}
 
 	for _, p := range patients {
-		_, err := repo.Store(p)
+		_, err := repository.Store(p)
 		if err != nil {
 			log.Printf("Erro ao semear paciente %s: %v", p.Name, err)
 			return fmt.Errorf("erro ao semear paciente %s: %v", p.Name, err)

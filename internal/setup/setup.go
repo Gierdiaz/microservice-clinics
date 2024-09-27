@@ -19,7 +19,7 @@ func SetupServices(db *sqlx.DB, rabbit *messaging.RabbitMQ) *handler.PatientsHan
 
 func SetupUserServices(db *sqlx.DB) *handler.UserHandler {
 	userRepository := userRepo.NewUserRepository(db)
-	userService := user.NewService(userRepository)
+	userService := user.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
 	return userHandler
 }
