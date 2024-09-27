@@ -5,9 +5,11 @@ repos:
         name: Run go fmt
         entry: go fmt ./...
         language: system
+        types: [file]
         files: \.go$
       - id: go-test
         name: Run go tests
         entry: go test ./...
         language: system
+        types: [file]
         files: \.go$

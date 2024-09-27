@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 # Rodar go fmt em todos os arquivos Go
 echo "Running go fmt..."
 go fmt ./...
