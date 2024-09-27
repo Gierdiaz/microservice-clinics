@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/Gierdiaz/diagier-clinics/config"
 	"github.com/Gierdiaz/diagier-clinics/infrastructure/database"
@@ -66,8 +70,34 @@ func main() {
 	// Inicializando o roteador Gin
 	router := endpoint.Router(db, rabbitMQ)
 
-	// Rodando o servidor HTTP na porta 8080
-	if err = http.ListenAndServe(config.Server.APP_SERVER, router); err != nil {
+	// Criando um servidor HTTP
+	server := &http.Server{
+		Addr:    config.Server.APP_SERVER,
+		Handler: router,
+	}
+
+	// Canal para capturar sinais de término
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
+
+	// Goroutine para lidar com o shutdown
+	go func() {
+		<-signalChan
+		logger.Log("level", "info", "msg", "Recebido sinal de término, encerrando o servidor...")
+
+		// Contexto para o shutdown
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		// Tenta encerrar o servidor
+		if err := server.Shutdown(ctx); err != nil {
+			logger.Log("level", "error", "msg", "Erro ao encerrar o servidor", "error", err)
+		}
+	}()
+
+	// Rodando o servidor HTTP
+	logger.Log("level", "info", "msg", "Servidor iniciado na porta", config.Server.APP_SERVER)
+	if err = server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		logger.Log("level", "error", "msg", "Erro ao iniciar o servidor", err)
 		os.Exit(1)
 	}
