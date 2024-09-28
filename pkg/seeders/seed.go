@@ -3,13 +3,13 @@ package seeders
 import (
 	"log"
 
-	"github.com/Gierdiaz/diagier-clinics/infrastructure/repositories/patient"
+	"github.com/Gierdiaz/diagier-clinics/infrastructure/repositories"
 	"github.com/jmoiron/sqlx"
 )
 
 // RunSeeds - Função responsável por rodar todas as seeds
 func RunSeeds(db *sqlx.DB) error {
-	patientRepo := repository.NewPatientRepository(db)
+	patientRepo := repositories.NewPatientRepository(db)
 
 	if err := SeedPatients(patientRepo); err != nil {
 		log.Fatalf("Erro ao rodar seeds de patients: %v", err)

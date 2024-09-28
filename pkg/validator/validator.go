@@ -3,7 +3,7 @@ package validator
 import (
 	"strings"
 
-	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/DTO"
 	"github.com/go-playground/validator/v10"
 )
 

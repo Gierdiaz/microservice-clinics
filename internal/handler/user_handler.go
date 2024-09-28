@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/user"
+	userApplication "github.com/Gierdiaz/diagier-clinics/internal/application/DTO"
 	"github.com/Gierdiaz/diagier-clinics/internal/domain/user"
 	"github.com/Gierdiaz/diagier-clinics/pkg/validator"
 	"github.com/gin-gonic/gin"
